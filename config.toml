@@ -1,9 +1,13 @@
 baseurl = "http://yjn93.github.io/"
 languageCode = "en-us"
 title = "木秀于南" 
+copyright =	"© 2016 Jianan Yue. All right reserved."
+	
 [author]
 	name = "Jianan Yue"
 
 [indexes]
 	tag = "tags"
 	topic = "topics"
+
+

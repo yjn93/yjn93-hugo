@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
-<head>
-    <meta charset="utf-8">
+{{ partial "head.html" . }}
+<body class="{{ .Site.Params.themeColor }} ">
 
-    {{ partial "meta.html" . }}
+{{ partial "sidebar.html" . }}
 
-    <base href="{{ .Site.BaseURL }}">
-    <title>{{ .Site.Title }}</title>
-    <link rel="canonical" href="{{ .Permalink }}">
-    <link href="{{ .RSSlink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+    <div class="content container">
+<div class="posts">
 
-    {{ partial "head_includes.html" . }}
-</head>
-<body lang="en">
+      {{ range .Data.Pages }}
+  <div class="post">
+    <h1 class="post-title">
+      <a href="{{ .Permalink }}">
+        {{ .Title }}
+      </a>
+    </h1>
 
-{{ partial "subheader.html" . }}
+    <span class="post-date">{{ .Date.Format "Mon, Jan 2, 2006" }}</span>
 
-<section id="main">
-  <div>
-      <h1 id="title">{{.Site.Title}}</h1>
-    {{ range first 10 .Data.Pages }}
-        {{ .Render "summary"}}
-    {{ end }}
+    {{ .Content }}
   </div>
-</section>
+  {{ end }}
+</div>
+</div>
 
-<aside id="meta"> </aside>
-
-{{ partial "footer.html" . }}
+  </body>
+</html>

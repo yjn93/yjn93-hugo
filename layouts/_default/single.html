@@ -1,18 +1,19 @@
-{{ partial "header.html" . }}
-<body lang="en" itemscope itemtype="http://schema.org/Article">
-{{ partial "subheader.html" . }}
-{{ $baseurl := .Site.BaseURL }}
+	{{ partial "head.html" . }}
+	<body class="{{ .Site.Params.themeColor }}">
+		{{ partial "sidebar.html" . }}
 
-<section id="main">
-  <h1 itemprop="name" id="title">{{ .Title }}</h1>
-  <div>
-        <article itemprop="articleBody" id="content">
-           {{ .Content }}
-        </article>
-  </div>
-</section>
+		<div class="content container">
+			<div class="post">
+			 	<h1>{{ .Title }}</h1>
+			  <span class="post-date">{{ .Date.Format "Mon, Jan 2, 2006" }}</span>
+			      {{ .Content }}
+			</div>
 
-{{ partial "meta_aside.html" . }}
+			{{ if and (isset .Site.Params "disqusShortname") (ne .Site.Params.disqusShortname "") }}
+				<h2>Comments</h2>
+				{{ partial "disqus" . }}
+			{{ end }}
+		</div>
 
-{{ partial "disqus.html" . }}
-{{ partial "footer.html" . }}
+  </body>
+</html>

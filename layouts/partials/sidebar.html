@@ -1,0 +1,15 @@
+<div class="sidebar">
+    <div class="sidebar-about">
+      <a href="{{ .Site.BaseURL }}"><h1>{{ .Site.Title }}</h1></a>
+      <p class="lead">
+	  {{ with .Site.Author.name }} {{.}} {{end}} 
+      </p>
+    </div>
+
+	{{partial "nav.html" .}}
+
+	<p class = "copyright">
+		powered by <a href = "http://gohugo.io">Hugo</a>
+		<br>{{with .Site.Copyright}}{{.}}{{end}}
+	</p>
+</div>

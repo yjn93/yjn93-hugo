@@ -1,12 +1,6 @@
 +++
-title = ""
-description = ""
-tags = [
-    "go",
-    "development",
-]
-topics = [
-    "Development",
-    "golang",
-]
+Description = ""
+Tags = ["Java"]
+Categories = ["Development"]
+menu = "main"
 +++
