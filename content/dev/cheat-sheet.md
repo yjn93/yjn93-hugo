@@ -9,8 +9,9 @@ title = "Cheat sheet"
 +++
 
 ## Vim Reference
-<a href = "https://www.fprintf.net/vimCheatSheet.html">Vim Cheat Sheet </a><br>
-<a href = "http://www.radford.edu/~mhtay/CPSC120/VIM_Editor_Commands.htm">Vim Editer Command</a>
+- [Vim Cheat Sheet](https://www.fprintf.net/vimCheatSheet.html")
+- [Vim Editer Command](http://www.radford.edu/~mhtay/CPSC120/VIM_Editor_Commands.htm")
+
 
 
 
