@@ -21,7 +21,6 @@ title = "Bit Manipulation"
 - ~(num-1) == -num
 
 # Single Number III
-## Probolem description
 - [LeetCode 260](https://leetcode.com/problems/single-number-iii/)
 
 Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.
@@ -51,8 +50,27 @@ The second pass is hard to come up with, we use the trick in the first session t
         return result;
     }
 ```
+
+# Single Number II
+- [LeetCode] (https://leetcode.com/problems/single-number-ii/)
+
+Given an array of integers, every element appears three times except for one. Find that single one.
+
+## Solution
+```
+    public int singleNumber(int[] nums) {
+        int ones = 0, twos = 0;
+        for(int num: nums) {
+            ones = (ones ^ num) & ~twos;
+            twos = (twos ^ num) & ~ones;
+        }
+        return ones;
+    }
+```
+
 # Missing Number
-- [LeetCode](https://leetcode.com/problems/missing-number/)
+- [LeetCode] (https://leetcode.com/problems/missing-number/)
+
 Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
 
 ## Example
