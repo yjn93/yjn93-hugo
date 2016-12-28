@@ -1,7 +1,7 @@
 +++
 Categories = ["Algorithm"]
 Description = ""
-Tags = ["Leetcode", "Bit Manipulation"]
+Tags = ["LeetCode", "Bit Manipulation"]
 date = "2016-11-13T10:46:27-05:00"
 menu = "main"
 title = "Bit Manipulation"

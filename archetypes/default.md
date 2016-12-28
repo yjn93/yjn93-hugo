@@ -1,6 +1,6 @@
 +++
 Description = ""
-Tags = ["Java"]
-Categories = ["Development"]
+Tags = ["LeetCode"]
+Categories = ["Algorithm"]
 menu = "main"
 +++

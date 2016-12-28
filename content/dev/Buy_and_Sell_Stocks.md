@@ -1,7 +1,7 @@
 +++
 Categories = ["Algorithm"]
 Description = ""
-Tags = ["Leetcode", "dp"]
+Tags = ["LeetCode", "DP"]
 date = "2016-11-18T09:54:11-05:00"
 menu = "main"
 title = "Buy and Sell Stocks"
