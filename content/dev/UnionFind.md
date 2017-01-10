@@ -331,3 +331,48 @@ Answer: 3
 
 ```
 
+# Graph Valid Tree
+
+Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree.
+
+For example:
+
+Given n = 5 and edges = [[0, 1], [0, 2], [0, 3], [1, 4]], return true.
+
+Given n = 5 and edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]], return false.
+
+## Solution
+
+For the graph to be a tree, it should satisfy 2 conditions:
+
+1. There is no cycle.
+2. Every node is connected in the graph.
+
+To check the first condition, we can use dfs or union find. If the first condition is satisfied, we can check the second one using the fact that number of edges in a tree = number of nodes - 1.
+
+```
+    int[] unionSet;
+    public boolean validTree(int n, int[][] edges) {
+        unionSet = new int[n];
+        for(int i = 0; i < n; i ++) {
+            unionSet[i] = i;
+        }
+        for(int[] edge: edges) {
+            int x = find(edge[0]);
+            int y = find(edge[1]);
+            if(x == y)
+                return false;
+            unionSet[x] = y;
+        }
+        return edges.length == n - 1;
+    }
+    
+    public int find(int x) {
+        if(unionSet[x] == x)
+            return x;
+        unionSet[x] = find(unionSet[x]);
+        return unionSet[x];
+    }
+
+```
+

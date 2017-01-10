@@ -74,9 +74,11 @@ Given an array of integers, every element appears three times except for one. Fi
 Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
 
 ## Example
+
 Given nums = [0, 1, 3] return 2.
 
 ## Solution
+
 
 ```
     public int missingNumber(int[] nums) {
@@ -87,7 +89,9 @@ Given nums = [0, 1, 3] return 2.
         }
         return result;
     }
+
 ```
+
 # Integer Replacement
 - [LeetCode 397](https://leetcode.com/problems/integer-replacement/)
 
@@ -159,4 +163,66 @@ We can use the same idea to do bit manipulation. When n is odd, we only need to 
     }
 ```
 
+# Subsets
 
+Given a set of distinct integers, nums, return all possible subsets.
+
+Note: The solution set must not contain duplicate subsets.
+
+For example,
+If nums = [1,2,3], a solution is:
+
+```
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+
+```
+
+## BackTracking Solution
+
+```
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        backTracking(result, new ArrayList<Integer>(), nums, 0);
+        return result;
+    }
+    
+    public void backTracking(List<List<Integer>> result, List<Integer> subset, int[] nums, int start) {
+        result.add(new ArrayList<Integer>(subset));
+        for(int i = start; i < nums.length; i ++) {
+            subset.add(nums[i]);
+            backTracking(result, subset, nums, i+1);
+            subset.remove(subset.size()-1);
+        }
+    }
+
+```
+
+## Bit Manipulation Solution
+
+We can take or not take an element, so we can represent one subset as a unique state sequence.
+
+```
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        int total = 1 << nums.length;
+        for(int i = 0; i < total; i ++) {
+            List<Integer> cur = new ArrayList();
+            for(int j = 0; j < nums.length; j ++) {
+                if(((1 << j) & i) != 0)
+                    cur.add(nums[j]);
+            }
+            result.add(cur);
+        }
+        return result;
+    }
+
+```

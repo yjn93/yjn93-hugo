@@ -178,6 +178,7 @@ It should return [1,4,8,2,5,9,3,6,7].
 Uses a linkedlist to store the iterators in different vectors. Every time we call next(), we pop an element from the list, and re-add it to the end to cycle through the lists.
 
 ```
+
 public class ZigzagIterator {
     LinkedList<Iterator> list;
     
@@ -209,5 +210,292 @@ Many things need to be notice in code:
 
 - After we got the Iterator cur, we need to convert cur.next() to (int), otherwise it will raise Object cannot convert to int exception.
 
- 
+# Flip Game
+
+You are playing the following Flip Game with your friend: Given a string that contains only these two characters: + and -, you and your friend take turns to flip two consecutive "++" into "--". The game ends when a person can no longer make a move and therefore the other person will be the winner.
+
+Write a function to determine if the starting player can guarantee a win.
+
+For example, given s = "++++", return true. The starting player can guarantee a win by flipping the middle "++" to become "+--+".
+
+## Solution
+
+```
+    Map<String, Boolean> winMap = new HashMap();
+    
+    public boolean canWin(String s) {
+        if(winMap.containsKey(s)) return winMap.get(s);
+        for(int i = -1; (i = s.indexOf("++", i + 1)) >= 0; ) {
+            String t = s.substring(0, i) + "--" + s.substring(i+2);
+            if(!canWin(t)) {
+                winMap.put(s, true);
+                return true;
+            }
+        }
+        winMap.put(s, false);
+        return false;
+    }
+
+``` 
+
+# Generalized Abbreviation
+
+Write a function to generate the generalized abbreviations of a word.
+
+## Example
+
+Given word = "word", return the following list (order does not matter):
+
+```
+["word", "1ord", "w1rd", "wo1d", "wor1", "2rd", "w2d", "wo2", "1o1d", "1or1", "w1r1", "1o2", "2r1", "3d", "w3", "4"]
+
+```
+
+## Solution
+
+For each character, we can choose to put or not put it in the abbreviation. So we can use backtracking
+
+```
+
+    public List<String> generateAbbreviations(String word) {
+        List<String> result = new ArrayList();
+        dfs(result, new StringBuilder(), word, 0, 0);
+        return result;
+    }
+    
+    public void dfs(List<String> result, StringBuilder sb, String word, int pos, int count) {
+        int len = sb.length();
+        if(pos == word.length()) {
+            if(count > 0) sb.append(count);
+            result.add(sb.toString());
+        } else {
+            dfs(result, sb, word, pos+1, count+1);
+            if(count > 0)
+                sb.append(count);
+            dfs(result, sb.append(word.charAt(pos)), word, pos+1, 0);
+        }
+        sb.setLength(len);
+    }
+
+```
+
+# Maximum Size Subarray Sum Equals k
+
+Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead.
+
+```
+
+Example 1:
+Given nums = [1, -1, 5, -2, 3], k = 3,
+return 4. (because the subarray [1, -1, 5, -2] sums to 3 and is the longest)
+
+Example 2:
+Given nums = [-2, -1, 2, 1], k = 1,
+return 2. (because the subarray [-1, 2] sums to 1 and is the longest
+
+```
+## Solution
+
+I didn't come up with the idea of using map.
+
+```
+    public int maxSubArrayLen(int[] nums, int k) {
+        int max = 0, sum = 0;
+        HashMap<Integer, Integer> map = new HashMap();
+        for(int i = 0; i < nums.length; i ++) {
+            sum += nums[i];
+            if(sum == k) 
+                max = i + 1;
+            else if(map.containsKey(sum - k))
+                max = Math.max(max, i - map.get(sum - k));
+            if(!map.containsKey(sum))
+                map.put(sum, i);
+        }
+        return max;
+    }
+
+```
+
+# Factor Combinations
+
+Numbers can be regarded as product of its factors. Write a function that takes an integer n and return all possible combinations of its factors,
+
+## Example
+
+```
+input: 1
+output: []
+
+input: 37
+output: []
+
+input: 12
+output:
+[
+  [2, 6],
+  [2, 2, 3],
+  [3, 4]
+]
+
+input: 32
+output:
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+
+```
+
+## Solution
+
+Backtracking, similar to combination sum.
+
+```
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> result = new ArrayList();
+        helper(result, new ArrayList(), n, 2);
+        return result;
+    }
+    
+    public void helper(List<List<Integer>> result, List<Integer> cur, int n, int start) {
+        for(int i = start; i <= n / i; i ++) {
+            if(n % i == 0) {
+                cur.add(i);
+                cur.add(n/i);
+                result.add(new ArrayList(cur));
+                cur.remove(cur.size()-1);
+                helper(result, cur, n/i, i);
+                cur.remove(cur.size()-1);
+            }
+        }
+    }
+
+```
+
+# Bomb Enemy
+
+Given a 2D grid, each cell is either a wall 'W', an enemy 'E' or empty '0' (the number zero), return the maximum enemies you can kill using one bomb.
+
+The bomb kills all the enemies in the same row and column from the planted point until it hits the wall since the wall is too strong to be destroyed.
+
+Note that you can only put the bomb at an empty cell.
+
+## Example
+
+```
+For the given grid
+
+0 E 0 0
+E 0 W E
+0 E 0 0
+
+return 3. (Placing a bomb at (1,1) kills 3 enemies)
+```
+
+## Solution
+
+Using dp, only need to record number of enemies in current row and every column. If encounter a wall, update the values.
+
+```
+    public int maxKilledEnemies(char[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        int m = grid.length, n = grid[0].length;
+        int row = 0;
+        int[] col = new int[n];
+        int max = 0;
+        for(int i = 0; i < m; i ++) {
+            for(int j = 0; j < n; j ++) {
+                if(grid[i][j] == 'W') continue;
+                if(j == 0 || grid[i][j-1] == 'W') {
+                    row = 0;
+                    for(int k = j; k < n && grid[i][k] != 'W'; k ++)
+                        row += grid[i][k] == 'E' ? 1 : 0;
+                }
+                if(i == 0 || grid[i-1][j] == 'W') {
+                    col[j] = 0;
+                    for(int k = i; k < m && grid[k][j] != 'W'; k ++)
+                        col[j] += grid[k][j] == 'E' ? 1 : 0;
+                }
+                if(grid[i][j] == '0')
+                    max = Math.max(row + col[j], max);
+            }
+        }
+        return max;
+    }
+
+```
+
+# Inorder Successor in BST
+
+Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
+
+Note: If the given node has no in-order successor in the tree, return null.
+
+## Solution
+
+```
+	//Iterative
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        TreeNode cur = root;
+        TreeNode result = null;
+        while(cur != null) {
+            if(cur.val > p.val) {
+                result = cur;
+                cur = cur.left;
+            } else {
+                cur = cur.right;
+            }
+        }
+        return result;
+    }
+
+	// Recursive
+	public TreeNode successor(TreeNode root, TreeNode p) {
+  		if (root == null)
+    	return null;
+
+  		if (root.val <= p.val) {
+    		return successor(root.right, p);
+  		} else {
+    		TreeNode left = successor(root.left, p);
+    		return (left != null) ? left : root;
+  		}
+	}	
+```
+
+# Find the Celebrity
+
+Suppose you are at a party with n people (labeled from 0 to n - 1) and among them, there may exist one celebrity. The definition of a celebrity is that all the other n - 1 people know him/her but he/she does not know any of them.
+
+Now you want to find out who the celebrity is or verify that there is not one. The only thing you are allowed to do is to ask questions like: "Hi, A. Do you know B?" to get information of whether A knows B. You need to find out the celebrity (or verify there is not one) by asking as few questions as possible (in the asymptotic sense).
+
+You are given a helper function bool knows(a, b) which tells you whether A knows B. Implement a function int findCelebrity(n), your function should minimize the number of calls to knows.
+
+Note: There will be exactly one celebrity if he/she is in the party. Return the celebrity's label if there is a celebrity in the party. If there is no celebrity, return -1.
+
+## Solution
+
+```
+    public int findCelebrity(int n) {
+        if(n <= 1) return n-1;
+        int cur = 0;
+        for(int i = 1; i < n; i ++) {
+            if(knows(cur, i)) {
+                    cur = i;
+            }
+        }
+        for(int i = 0; i < n; i ++) {
+            if(i != cur && (knows(cur, i) || !knows(i, cur)))
+                return -1;
+        }
+        return cur;
+    }
+
+```
+
 
