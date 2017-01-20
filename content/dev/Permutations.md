@@ -187,3 +187,58 @@ Given n and k, return the kth permutation sequence.
         return sb.toString();
     }
 ```
+
+# Palindrome Permutation II
+
+Given a string s, return all the palindromic permutations (without duplicates) of it. Return an empty list if no palindromic permutation could be form.
+
+For example:
+
+Given s = "aabb", return ["abba", "baab"].
+
+Given s = "abc", return [].
+
+## Solution
+
+```
+    public List<String> generatePalindromes(String s) {
+        List<String> result = new ArrayList();
+        if(s == null || s.length() == 0)
+            return result;
+        Set<Character> set = new HashSet();
+        List<Character> sb = new ArrayList();
+        for(int i = 0; i < s.length(); i ++) {
+            if(!set.add(s.charAt(i))) {
+                set.remove(s.charAt(i));
+                sb.add(s.charAt(i));
+            }
+        }
+        System.out.println(sb.toString());
+        if(set.size() != 0 && set.size() != 1)
+            return result;
+        String mid = set.size() == 1 ? set.iterator().next().toString() : "";
+        Collections.sort(sb);
+        helper(result, new StringBuilder(), mid, sb, new boolean[sb.size()]);
+        return result;        
+    }
+    
+    public void helper(List<String> result, StringBuilder cur, String mid, List<Character> sb, boolean[] used) {
+        if(cur.length() == sb.size()) {
+            result.add(cur.toString() + mid + cur.reverse().toString());
+            // reverse back is very important!!!
+            cur.reverse();
+            return;
+        }
+        for(int i = 0; i < sb.size(); i ++) {
+            if(used[i]) continue;
+            if(i > 0 && sb.get(i) == sb.get(i-1) && !used[i-1]) continue;
+            cur.append(sb.get(i));
+            used[i] = true;
+            helper(result, cur, mid, sb, used);
+            cur.deleteCharAt(cur.length()-1);
+            used[i] = false;
+        }
+    }
+
+```
+
