@@ -1152,3 +1152,54 @@ The read function may be called multiple times.
     }
 ```
 
+
+# Group Shifted Strings
+
+Given a string, we can "shift" each of its letter to its successive letter, for example: "abc" -> "bcd". We can keep "shifting" which forms the sequence:
+
+"abc" -> "bcd" -> ... -> "xyz"
+
+Given a list of strings which contains only lowercase alphabets, group all strings that belong to the same shifting sequence.
+
+## Example 
+
+```
+["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"]
+
+[
+  ["abc","bcd","xyz"],
+  ["az","ba"],
+  ["acef"],
+  ["a","z"]
+]
+Show Company Tags
+Show Tags
+Show Similar Problems
+
+
+```
+
+## Solution
+
+```
+    public List<List<String>> groupStrings(String[] strings) {
+        Map<String, List<String>> map = new HashMap();
+        Arrays.sort(strings);
+        for(String cur: strings) {
+            int offset = cur.charAt(0) - 'a';
+            String key = "";
+            for(int i = 0; i < cur.length(); i ++) {
+                char c = (char)(cur.charAt(i) - offset);
+                if(c < 'a')
+                    c += 26;
+                key += c;
+            }
+            if(!map.containsKey(key))
+                map.put(key, new ArrayList());
+            map.get(key).add(cur);
+        }
+        return new ArrayList(map.values());
+    }
+```
+
+

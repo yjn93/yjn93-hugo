@@ -764,3 +764,89 @@ The correct order is: "wertf".
 
 ```
 
+# Optimal Account Balancing
+
+A group of friends went on holiday and sometimes lent each other money. For example, Alice paid for Bill's lunch for $10. Then later Chris gave Alice $5 for a taxi ride. We can model each transaction as a tuple (x, y, z) which means person x gave person y $z. Assuming Alice, Bill, and Chris are person 0, 1, and 2 respectively (0, 1, 2 are the person's ID), the transactions can be represented as [[0, 1, 10], [2, 0, 5]].
+
+Given a list of transactions between a group of people, return the minimum number of transactions required to settle the debt.
+
+Note:
+
+1. A transaction will be given as a tuple (x, y, z). Note that x ≠ y and z > 0.
+2. Person's IDs may not be linear, e.g. we could have the persons 0, 1, 2 or we could also have the persons 0, 2, 6.
+
+## Example
+
+```
+Input:
+[[0,1,10], [1,0,1], [1,2,5], [2,0,5]]
+
+Output:
+1
+
+Explanation:
+Person #0 gave person #1 $10.
+Person #1 gave person #0 $1.
+Person #1 gave person #2 $5.
+Person #2 gave person #0 $5.
+
+Therefore, person #1 only need to give person #0 $4, and all debt is settled.
+
+```
+
+## Solution
+
+```
+    public int minTransfers(int[][] transactions) {
+        HashMap<Integer, Integer> map = new HashMap();
+        for(int[] trans: transactions) {
+            map.put(trans[0], map.getOrDefault(trans[0], 0) - trans[2]);
+            map.put(trans[1], map.getOrDefault(trans[1], 0) + trans[2]);
+        }
+        List<Integer> balance = new ArrayList();
+        int index = 0;
+        for(int v: map.values()) {
+            if(v != 0)
+                balance.add(v);
+        }
+        return cleanBalance(balance) + minMatch(balance, 0);
+        
+        
+    }
+    
+    public int cleanBalance(List<Integer> balance) {
+        Collections.sort(balance);
+        int left = 0, right = balance.size()-1;
+        int count = 0;
+        while(left < right) {
+            if(- balance.get(left) == balance.get(right)) {
+                count ++;
+                balance.remove(right);
+                balance.remove(left);
+                right -= 2;
+            } else if(- balance.get(left) > balance.get(right))
+                left ++;
+            else
+                right --;
+        }
+        return count;
+    }
+    
+    public int minMatch(List<Integer> balance, int start) {
+        int min = Integer.MAX_VALUE;
+        while(start < balance.size() && balance.get(start) == 0)
+            start ++;
+        if(start == balance.size())
+            return 0;
+        int cur = balance.get(start);
+        for(int i = start + 1; i < balance.size(); i ++) {
+            if(balance.get(i) * cur < 0) {
+                balance.set(i, balance.get(i) + cur);
+                min = Math.min(min, 1 + minMatch(balance, start + 1));
+                balance.set(i, balance.get(i) - cur);
+            }
+        }
+        return min;
+    }
+
+```
